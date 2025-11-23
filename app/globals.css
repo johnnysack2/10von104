@@ -1,7 +1,8 @@
 :root {
   --background: #000000;
   --foreground: #ffffff;
-  --accent: #ff0055; /* Neon Pink */
+  --accent: #ff0055;
+  /* Neon Pink */
   --accent-glow: rgba(255, 0, 85, 0.5);
   --card-bg: #111111;
   --font-main: 'Inter', sans-serif;
@@ -152,6 +153,41 @@ p {
 }
 
 @keyframes spin {
-  0% { transform: rotate(0deg); }
-  100% { transform: rotate(360deg); }
+  0% {
+    transform: rotate(0deg);
+  }
+
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+/* Loading Text Animation */
+.loading-text {
+  margin-top: 1.5rem;
+  font-style: italic;
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: var(--accent);
+  text-shadow: 0 0 10px var(--accent-glow);
+  animation: pulse 1.5s infinite ease-in-out;
+  letter-spacing: 1px;
+}
+
+@keyframes pulse {
+  0% {
+    opacity: 0.6;
+    transform: scale(0.98);
+  }
+
+  50% {
+    opacity: 1;
+    transform: scale(1.02);
+    text-shadow: 0 0 20px var(--accent), 0 0 40px var(--accent);
+  }
+
+  100% {
+    opacity: 0.6;
+    transform: scale(0.98);
+  }
 }

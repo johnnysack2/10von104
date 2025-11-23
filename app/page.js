@@ -76,8 +76,8 @@ export default function Home() {
             reader.onload = async () => {
                 const base64Image = reader.result;
 
-                // Create a promise for the minimum delay (4 seconds)
-                const delayPromise = new Promise(resolve => setTimeout(resolve, 4000));
+                // Create a promise for the minimum delay (6 seconds)
+                const delayPromise = new Promise(resolve => setTimeout(resolve, 6000));
 
                 // Create the fetch promise
                 const fetchPromise = fetch('/api/roast', {
@@ -187,7 +187,7 @@ export default function Home() {
                 {loading && (
                     <div style={{ marginTop: '3rem', textAlign: 'center' }}>
                         <div className="loader"></div>
-                        <p style={{ marginTop: '1rem', fontStyle: 'italic', fontSize: '1.2rem', color: '#ff00ff', textShadow: '0 0 10px #ff00ff' }}>
+                        <p className="loading-text">
                             {loadingMsg}
                         </p>
                     </div>
