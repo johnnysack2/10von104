@@ -209,8 +209,9 @@ export default function Home() {
                                 left: 0,
                                 right: 0,
                                 bottom: 0,
-                                backdropFilter: 'blur(10px)',
-                                background: 'rgba(0,0,0,0.6)',
+                                backdropFilter: 'blur(20px)',
+                                WebkitBackdropFilter: 'blur(20px)', /* Safari/iOS support */
+                                background: 'rgba(0,0,0,0.85)',
                                 zIndex: 10,
                                 display: 'flex',
                                 flexDirection: 'column',
