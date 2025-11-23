@@ -194,7 +194,7 @@ export default function Home() {
                                     TOO BRUTAL TO SHOW
                                 </h2>
                                 <p style={{ marginBottom: '2rem', fontSize: '1.2rem' }}>
-                                    Unlock the full roast for just $1
+                                    Unlock the full roast for just 2.99€
                                 </p>
                                 <button className="btn" onClick={handleUnlock}>
                                     UNLOCK NOW 🔓
