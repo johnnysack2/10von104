@@ -46,11 +46,28 @@ export default function Home() {
         e.preventDefault();
     };
 
+    const [loadingMsg, setLoadingMsg] = useState('');
+
+    const loadingMessages = [
+        "Scanning facial symmetry...",
+        "Detecting insecurities...",
+        "Analyzing fashion disasters...",
+        "Oh god... generating roast..."
+    ];
+
     const handleSubmit = async () => {
         if (!file) return;
 
         setLoading(true);
         setError(null);
+        setLoadingMsg(loadingMessages[0]);
+
+        // Start message cycling
+        let msgIndex = 0;
+        const msgInterval = setInterval(() => {
+            msgIndex = (msgIndex + 1) % loadingMessages.length;
+            setLoadingMsg(loadingMessages[msgIndex]);
+        }, 1000);
 
         try {
             // Convert file to base64
@@ -59,7 +76,11 @@ export default function Home() {
             reader.onload = async () => {
                 const base64Image = reader.result;
 
-                const response = await fetch('/api/roast', {
+                // Create a promise for the minimum delay (4 seconds)
+                const delayPromise = new Promise(resolve => setTimeout(resolve, 4000));
+
+                // Create the fetch promise
+                const fetchPromise = fetch('/api/roast', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
@@ -67,7 +88,12 @@ export default function Home() {
                     body: JSON.stringify({ image: base64Image }),
                 });
 
+                // Wait for BOTH to finish
+                const [_, response] = await Promise.all([delayPromise, fetchPromise]);
+
                 const data = await response.json();
+
+                clearInterval(msgInterval); // Stop cycling messages
 
                 if (response.ok) {
                     setResult(data);
@@ -77,10 +103,12 @@ export default function Home() {
                 setLoading(false);
             };
             reader.onerror = () => {
+                clearInterval(msgInterval);
                 setError('Failed to read file');
                 setLoading(false);
             };
         } catch (err) {
+            clearInterval(msgInterval);
             setError('Failed to connect to server');
             setLoading(false);
         }
@@ -159,8 +187,8 @@ export default function Home() {
                 {loading && (
                     <div style={{ marginTop: '3rem', textAlign: 'center' }}>
                         <div className="loader"></div>
-                        <p style={{ marginTop: '1rem', fontStyle: 'italic' }}>
-                            Analyzing your flaws...
+                        <p style={{ marginTop: '1rem', fontStyle: 'italic', fontSize: '1.2rem', color: '#ff00ff', textShadow: '0 0 10px #ff00ff' }}>
+                            {loadingMsg}
                         </p>
                     </div>
                 )}
