@@ -1,0 +1,229 @@
+'use client';
+
+import { useState, useRef, useEffect } from 'react';
+
+export default function Home() {
+    const [file, setFile] = useState(null);
+    const [preview, setPreview] = useState(null);
+    const [loading, setLoading] = useState(false);
+    const [result, setResult] = useState(null);
+    const [error, setError] = useState(null);
+    const [isPaid, setIsPaid] = useState(false);
+    const fileInputRef = useRef(null);
+
+    useEffect(() => {
+        // Check if user has paid (simple URL param check for prototype)
+        if (typeof window !== 'undefined') {
+            const params = new URLSearchParams(window.location.search);
+            if (params.get('paid') === 'true') {
+                setIsPaid(true);
+            }
+        }
+    }, []);
+
+    const handleFileChange = (e) => {
+        const selectedFile = e.target.files[0];
+        if (selectedFile) {
+            setFile(selectedFile);
+            setPreview(URL.createObjectURL(selectedFile));
+            setResult(null);
+            setError(null);
+        }
+    };
+
+    const handleDrop = (e) => {
+        e.preventDefault();
+        const selectedFile = e.dataTransfer.files[0];
+        if (selectedFile) {
+            setFile(selectedFile);
+            setPreview(URL.createObjectURL(selectedFile));
+            setResult(null);
+            setError(null);
+        }
+    };
+
+    const handleDragOver = (e) => {
+        e.preventDefault();
+    };
+
+    const handleSubmit = async () => {
+        if (!file) return;
+
+        setLoading(true);
+        setError(null);
+
+        try {
+            // Convert file to base64
+            const reader = new FileReader();
+            reader.readAsDataURL(file);
+            reader.onload = async () => {
+                const base64Image = reader.result;
+
+                const response = await fetch('/api/roast', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ image: base64Image }),
+                });
+
+                const data = await response.json();
+
+                if (response.ok) {
+                    setResult(data);
+                } else {
+                    setError(data.error || 'Something went wrong');
+                }
+                setLoading(false);
+            };
+            reader.onerror = () => {
+                setError('Failed to read file');
+                setLoading(false);
+            };
+        } catch (err) {
+            setError('Failed to connect to server');
+            setLoading(false);
+        }
+    };
+
+    const handleUnlock = () => {
+        window.location.href = 'https://buy.stripe.com/test_5kQ7sL3PU9vF7WOfRM2go00';
+    };
+
+    return (
+        <main className="container">
+            <header style={{ textAlign: 'center', marginBottom: '3rem' }}>
+                <h1>EGO ROASTER</h1>
+                <p>Dare to see what the AI really thinks of you?</p>
+            </header>
+
+            <div className="card">
+                {!preview ? (
+                    <div
+                        className="upload-area"
+                        onDrop={handleDrop}
+                        onDragOver={handleDragOver}
+                        onClick={() => fileInputRef.current.click()}
+                    >
+                        <input
+                            type="file"
+                            hidden
+                            ref={fileInputRef}
+                            onChange={handleFileChange}
+                            accept="image/*"
+                        />
+                        <p style={{ fontSize: '1.2rem', fontWeight: 'bold', color: '#fff' }}>
+                            Drop your screenshot here
+                        </p>
+                        <p style={{ fontSize: '0.9rem', marginTop: '0.5rem' }}>
+                            or click to browse
+                        </p>
+                    </div>
+                ) : (
+                    <div style={{ textAlign: 'center' }}>
+                        <img
+                            src={preview}
+                            alt="Preview"
+                            style={{
+                                maxWidth: '100%',
+                                maxHeight: '400px',
+                                borderRadius: '10px',
+                                marginBottom: '2rem',
+                                border: '1px solid #333',
+                            }}
+                        />
+                        <div style={{ display: 'flex', gap: '1rem', justifyContent: 'center' }}>
+                            <button
+                                className="btn"
+                                onClick={handleSubmit}
+                                disabled={loading}
+                            >
+                                {loading ? 'Roasting...' : 'ROAST ME'}
+                            </button>
+                            <button
+                                className="btn"
+                                style={{ background: '#333', boxShadow: 'none' }}
+                                onClick={() => {
+                                    setFile(null);
+                                    setPreview(null);
+                                    setResult(null);
+                                }}
+                                disabled={loading}
+                            >
+                                Reset
+                            </button>
+                        </div>
+                    </div>
+                )}
+
+                {loading && (
+                    <div style={{ marginTop: '3rem', textAlign: 'center' }}>
+                        <div className="loader"></div>
+                        <p style={{ marginTop: '1rem', fontStyle: 'italic' }}>
+                            Analyzing your flaws...
+                        </p>
+                    </div>
+                )}
+
+                {error && (
+                    <div style={{ marginTop: '2rem', color: 'red', textAlign: 'center' }}>
+                        {error}
+                    </div>
+                )}
+
+                {result && (
+                    <div style={{ marginTop: '3rem', animation: 'fadeIn 0.5s ease', position: 'relative' }}>
+                        {/* Paywall Overlay */}
+                        {!isPaid && (
+                            <div style={{
+                                position: 'absolute',
+                                top: 0,
+                                left: 0,
+                                right: 0,
+                                bottom: 0,
+                                backdropFilter: 'blur(10px)',
+                                background: 'rgba(0,0,0,0.6)',
+                                zIndex: 10,
+                                display: 'flex',
+                                flexDirection: 'column',
+                                alignItems: 'center',
+                                justifyContent: 'center',
+                                borderRadius: '10px'
+                            }}>
+                                <h2 style={{ fontSize: '2rem', marginBottom: '1rem', textShadow: '0 0 10px black' }}>
+                                    TOO BRUTAL TO SHOW
+                                </h2>
+                                <p style={{ marginBottom: '2rem', fontSize: '1.2rem' }}>
+                                    Unlock the full roast for just $1
+                                </p>
+                                <button className="btn" onClick={handleUnlock}>
+                                    UNLOCK NOW 🔓
+                                </button>
+                            </div>
+                        )}
+
+                        <div className="rating-circle">
+                            {result.rating}/10
+                        </div>
+
+                        <div style={{ marginBottom: '2rem' }}>
+                            <h2>The Roast</h2>
+                            <p style={{ fontSize: '1.1rem', color: '#fff' }}>
+                                {result.roast}
+                            </p>
+                        </div>
+
+                        <div>
+                            <h2>Tips to Un-Cringe</h2>
+                            <ul className="tips-list">
+                                {result.tips.map((tip, index) => (
+                                    <li key={index}>{tip}</li>
+                                ))}
+                            </ul>
+                        </div>
+                    </div>
+                )}
+            </div>
+        </main>
+    );
+}
