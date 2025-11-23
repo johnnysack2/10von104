@@ -15,7 +15,7 @@ export default function Home() {
         // Check if user has paid (simple URL param check for prototype)
         if (typeof window !== 'undefined') {
             const params = new URLSearchParams(window.location.search);
-            if (params.get('paid') === 'true') {
+            if (params.get('paid') === 'true' || params.get('admin') === 'true') {
                 setIsPaid(true);
             }
         }
