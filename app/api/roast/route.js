@@ -1,9 +1,29 @@
-const base64Data = image.split(',')[1];
-const mimeType = image.split(';')[0].split(':')[1];
+import { GoogleGenerativeAI } from "@google/generative-ai";
+import { NextResponse } from 'next/server';
 
-const model = genAI.getGenerativeModel({ model: "gemini-2.0-flash" });
+const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
 
-const prompt = `
+export async function POST(req) {
+    try {
+        const apiKey = process.env.GEMINI_API_KEY;
+        if (!apiKey) {
+            console.error("GEMINI_API_KEY is missing in environment variables.");
+            return NextResponse.json({ error: 'Server configuration error: API Key missing. Please restart the server.' }, { status: 500 });
+        }
+
+        const { image } = await req.json();
+
+        if (!image) {
+            return NextResponse.json({ error: 'No image provided' }, { status: 400 });
+        }
+
+        // We need to extract the base64 part
+        const base64Data = image.split(',')[1];
+        const mimeType = image.split(';')[0].split(':')[1];
+
+        const model = genAI.getGenerativeModel({ model: "gemini-2.0-flash" });
+
+        const prompt = `
     You are a brutal, cynical, but hilarious roast master. You are analyzing a user's Tinder profile or Instagram feed.
     Your goal is to destroy their ego but also give them helpful advice.
     
@@ -16,45 +36,45 @@ const prompt = `
     Return ONLY the JSON.
     `;
 
-const result = await model.generateContent([
-    prompt,
-    {
-        inlineData: {
-            data: base64Data,
-            mimeType: mimeType
+        const result = await model.generateContent([
+            prompt,
+            {
+                inlineData: {
+                    data: base64Data,
+                    mimeType: mimeType
+                }
+            }
+        ]);
+
+        const responseText = result.response.text();
+        console.log("Raw Gemini response:", responseText);
+
+        // Clean up markdown code blocks if present
+        let jsonString = responseText.replace(/```json\n?|```/g, "").trim();
+
+        // Attempt to find the first '{' and last '}' to extract JSON
+        const firstOpen = jsonString.indexOf('{');
+        const lastClose = jsonString.lastIndexOf('}');
+        if (firstOpen !== -1 && lastClose !== -1) {
+            jsonString = jsonString.substring(firstOpen, lastClose + 1);
         }
-    }
-]);
 
-const responseText = result.response.text();
-console.log("Raw Gemini response:", responseText);
+        let data;
+        try {
+            data = JSON.parse(jsonString);
+        } catch (parseError) {
+            console.error("JSON Parse Error:", parseError);
+            console.error("Failed JSON string:", jsonString);
+            return NextResponse.json({ error: 'Failed to parse AI response', details: responseText }, { status: 500 });
+        }
 
-// Clean up markdown code blocks if present
-let jsonString = responseText.replace(/```json\n?|```/g, "").trim();
-
-// Attempt to find the first '{' and last '}' to extract JSON
-const firstOpen = jsonString.indexOf('{');
-const lastClose = jsonString.lastIndexOf('}');
-if (firstOpen !== -1 && lastClose !== -1) {
-    jsonString = jsonString.substring(firstOpen, lastClose + 1);
-}
-
-let data;
-try {
-    data = JSON.parse(jsonString);
-} catch (parseError) {
-    console.error("JSON Parse Error:", parseError);
-    console.error("Failed JSON string:", jsonString);
-    return NextResponse.json({ error: 'Failed to parse AI response', details: responseText }, { status: 500 });
-}
-
-return NextResponse.json(data);
+        return NextResponse.json(data);
     } catch (error) {
-    console.error('Error roasting image:', error);
-    return NextResponse.json({
-        error: 'Failed to roast image',
-        details: error.message,
-        stack: error.stack
-    }, { status: 500 });
-}
+        console.error('Error roasting image:', error);
+        return NextResponse.json({
+            error: 'Failed to roast image',
+            details: error.message,
+            stack: error.stack
+        }, { status: 500 });
+    }
 }
