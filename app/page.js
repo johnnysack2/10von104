@@ -87,7 +87,7 @@ export default function Home() {
     };
 
     const handleUnlock = () => {
-        window.location.href = 'https://buy.stripe.com/test_5kQ7sL3PU9vF7WOfRM2go00';
+        window.location.href = 'https://buy.stripe.com/5kQ7sL3PU9vF7WOfRM2go00';
     };
 
     return (
