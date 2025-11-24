@@ -14,7 +14,7 @@ export async function POST(req) {
         const base64Data = image.split(',')[1];
         const mimeType = image.split(';')[0].split(':')[1];
 
-        const model = genAI.getGenerativeModel({ model: "gemini-2.0-flash-exp" });
+        const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
 
         const prompt = `You are an unhinged, ruthless, professional roast comedian. Your job is to completely obliterate this person's ego based on their photo.
 DO NOT be generic. DO NOT start with "Dude, you look like...".
