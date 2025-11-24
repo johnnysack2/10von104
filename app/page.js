@@ -223,11 +223,29 @@ export default function Home() {
 
                 {result && (
                     <div style={{ marginTop: '3rem', animation: 'fadeIn 0.5s ease', position: 'relative' }}>
+
+                        {/* FREE TEASER - Micro Roast */}
+                        <div style={{
+                            marginBottom: '2rem',
+                            padding: '1.5rem',
+                            background: 'rgba(255, 0, 0, 0.1)',
+                            border: '1px solid #ff0000',
+                            borderRadius: '10px',
+                            boxShadow: '0 0 20px rgba(255, 0, 0, 0.2)'
+                        }}>
+                            <h3 style={{ color: '#ff4444', marginBottom: '0.5rem', textTransform: 'uppercase', fontSize: '0.9rem', letterSpacing: '2px' }}>
+                                AI FIRST IMPRESSION
+                            </h3>
+                            <p style={{ fontSize: '1.4rem', fontWeight: 'bold', fontStyle: 'italic', lineHeight: '1.4' }}>
+                                "{result.teaser_roast}"
+                            </p>
+                        </div>
+
                         {/* Paywall Overlay */}
                         {!isPaid && (
                             <div style={{
                                 position: 'absolute',
-                                top: 0,
+                                top: '180px', // Push overlay down to show teaser
                                 left: 0,
                                 right: 0,
                                 bottom: 0,
