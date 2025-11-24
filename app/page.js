@@ -9,7 +9,6 @@ export default function Home() {
     const [result, setResult] = useState(null);
     const [error, setError] = useState(null);
     const [isPaid, setIsPaid] = useState(false);
-    const [showPaywall, setShowPaywall] = useState(false);
     const fileInputRef = useRef(null);
 
     useEffect(() => {
@@ -18,7 +17,6 @@ export default function Home() {
             const params = new URLSearchParams(window.location.search);
             if (params.get('paid') === 'true' || params.get('admin') === 'true') {
                 setIsPaid(true);
-                setShowPaywall(true); // Auto-show if paid
             }
         }
     }, []);
@@ -30,7 +28,6 @@ export default function Home() {
             setPreview(URL.createObjectURL(selectedFile));
             setResult(null);
             setError(null);
-            setShowPaywall(false);
         }
     };
 
@@ -42,7 +39,6 @@ export default function Home() {
             setPreview(URL.createObjectURL(selectedFile));
             setResult(null);
             setError(null);
-            setShowPaywall(false);
         }
     };
 
@@ -65,7 +61,6 @@ export default function Home() {
         setLoading(true);
         setError(null);
         setLoadingMsg(loadingMessages[0]);
-        setShowPaywall(false);
 
         let msgIndex = 0;
         const msgInterval = setInterval(() => {
@@ -181,7 +176,7 @@ export default function Home() {
                             alt="Preview"
                             style={{
                                 maxWidth: '100%',
-                                maxHeight: result ? '120px' : '400px', // Aggressive shrink
+                                maxHeight: result ? '120px' : '400px',
                                 borderRadius: '10px',
                                 marginBottom: result ? '0.5rem' : '1rem',
                                 border: '1px solid #333',
@@ -190,7 +185,6 @@ export default function Home() {
                             }}
                         />
 
-                        {/* Hide buttons when result is shown to save space */}
                         {!result && (
                             <div style={{ display: 'flex', gap: '1rem', justifyContent: 'center' }}>
                                 <button
@@ -248,7 +242,6 @@ export default function Home() {
                             position: 'relative',
                             overflow: 'hidden'
                         }}>
-                            {/* Glow Effect Background */}
                             <div style={{
                                 position: 'absolute',
                                 top: '-50%',
@@ -282,107 +275,83 @@ export default function Home() {
                             </p>
                         </div>
 
-                        {/* REVEAL BUTTON (If Paywall Hidden) */}
-                        {!showPaywall && !isPaid && (
-                            <div style={{ textAlign: 'center', marginTop: '1rem' }}>
-                                <button
-                                    className="btn"
-                                    onClick={() => setShowPaywall(true)}
-                                    style={{
-                                        width: '100%',
-                                        padding: '1rem',
-                                        fontSize: '1.1rem',
-                                        background: 'linear-gradient(45deg, #ff4444, #ff0000)',
-                                        boxShadow: '0 0 20px rgba(255, 68, 68, 0.4)'
-                                    }}
-                                >
-                                    💀 REVEAL FULL ROAST
-                                </button>
-                                <p style={{ marginTop: '0.5rem', fontSize: '0.8rem', color: '#888' }}>
-                                    Warning: Contains brutal honesty.
-                                </p>
-                            </div>
-                        )}
+                        {/* LOCKED CONTENT - ALWAYS VISIBLE */}
+                        <div style={{ position: 'relative' }}>
 
-                        {/* LOCKED CONTENT CONTAINER */}
-                        {(showPaywall || isPaid) && (
-                            <div style={{ position: 'relative', animation: 'fadeIn 0.5s ease' }}>
+                            {/* Paywall Overlay */}
+                            {!isPaid && (
+                                <div style={{
+                                    position: 'absolute',
+                                    top: '-5px',
+                                    left: '-10px',
+                                    right: '-10px',
+                                    bottom: '-10px',
+                                    background: 'linear-gradient(to bottom, rgba(0,0,0,0) 0%, rgba(0,0,0,0.95) 10%, #000 100%)',
+                                    backdropFilter: 'blur(10px)',
+                                    zIndex: 10,
+                                    display: 'flex',
+                                    flexDirection: 'column',
+                                    alignItems: 'center',
+                                    justifyContent: 'flex-start',
+                                    paddingTop: '2rem',
+                                    borderRadius: '20px',
+                                    textAlign: 'center'
+                                }}>
+                                    <h2 style={{ fontSize: '1.5rem', marginBottom: '0.2rem', textShadow: '0 0 30px rgba(255,0,0,0.6)', color: '#fff' }}>
+                                        ✨ ANALYSIS READY
+                                    </h2>
+                                    <p style={{ fontSize: '0.8rem', color: '#aaa', marginBottom: '1rem' }}>
+                                        Your full report is generated.
+                                    </p>
 
-                                {/* Paywall Overlay */}
-                                {!isPaid && (
-                                    <div style={{
-                                        position: 'absolute',
-                                        top: '-5px',
-                                        left: '-10px',
-                                        right: '-10px',
-                                        bottom: '-10px',
-                                        background: 'linear-gradient(to bottom, rgba(0,0,0,0) 0%, rgba(0,0,0,0.95) 10%, #000 100%)',
-                                        backdropFilter: 'blur(10px)',
-                                        zIndex: 10,
-                                        display: 'flex',
-                                        flexDirection: 'column',
-                                        alignItems: 'center',
-                                        justifyContent: 'flex-start', // ALIGN TO TOP
-                                        paddingTop: '2rem', // Push down slightly from top edge
-                                        borderRadius: '20px',
-                                        textAlign: 'center'
-                                    }}>
-                                        <h2 style={{ fontSize: '1.5rem', marginBottom: '0.2rem', textShadow: '0 0 30px rgba(255,0,0,0.6)', color: '#fff' }}>
-                                            ✨ ANALYSIS READY
-                                        </h2>
-                                        <p style={{ fontSize: '0.8rem', color: '#aaa', marginBottom: '1rem' }}>
-                                            Your full report is generated.
+                                    <div style={{ textAlign: 'left', marginBottom: '1rem', background: 'rgba(255,255,255,0.03)', padding: '0.8rem', borderRadius: '10px', border: '1px solid rgba(255,255,255,0.05)', width: '90%', maxWidth: '300px' }}>
+                                        <p style={{ margin: '0.3rem 0', display: 'flex', alignItems: 'center', gap: '8px', fontSize: '0.8rem' }}>
+                                            ✅ <span style={{ color: '#fff' }}><strong>Unhinged Roast</strong> (Full)</span>
                                         </p>
-
-                                        <div style={{ textAlign: 'left', marginBottom: '1rem', background: 'rgba(255,255,255,0.03)', padding: '0.8rem', borderRadius: '10px', border: '1px solid rgba(255,255,255,0.05)', width: '90%', maxWidth: '300px' }}>
-                                            <p style={{ margin: '0.3rem 0', display: 'flex', alignItems: 'center', gap: '8px', fontSize: '0.8rem' }}>
-                                                ✅ <span style={{ color: '#fff' }}><strong>Unhinged Roast</strong> (Full)</span>
-                                            </p>
-                                            <p style={{ margin: '0.3rem 0', display: 'flex', alignItems: 'center', gap: '8px', fontSize: '0.8rem' }}>
-                                                ✅ <span style={{ color: '#fff' }}><strong>Brutal Rating</strong> (1-10)</span>
-                                            </p>
-                                            <p style={{ margin: '0.3rem 0', display: 'flex', alignItems: 'center', gap: '8px', fontSize: '0.8rem' }}>
-                                                ✅ <span style={{ color: '#fff' }}><strong>3 Life-Changing Tips</strong></span>
-                                            </p>
-                                            <p style={{ margin: '0.3rem 0', display: 'flex', alignItems: 'center', gap: '8px', fontSize: '0.8rem' }}>
-                                                🔥 <span style={{ color: '#fff' }}><strong>Psychological Analysis</strong></span>
-                                            </p>
-                                        </div>
-
-                                        <button className="btn" onClick={handleUnlock} style={{ transform: 'scale(1.05)', marginBottom: '0.5rem', boxShadow: '0 0 30px rgba(255, 68, 68, 0.4)', padding: '0.7rem 1.5rem', fontSize: '0.9rem' }}>
-                                            UNLOCK NOW • 2.99€
-                                        </button>
-
-                                        <p style={{ fontSize: '0.6rem', color: '#555', marginTop: '0.3rem' }}>
-                                            🔒 Secure Payment via Stripe
+                                        <p style={{ margin: '0.3rem 0', display: 'flex', alignItems: 'center', gap: '8px', fontSize: '0.8rem' }}>
+                                            ✅ <span style={{ color: '#fff' }}><strong>Brutal Rating</strong> (1-10)</span>
                                         </p>
-                                    </div>
-                                )}
-
-                                {/* Blurred Content (Visible underneath) */}
-                                <div style={{ filter: !isPaid ? 'blur(15px)' : 'none', opacity: !isPaid ? 0.5 : 1, transition: 'all 0.5s ease' }}>
-                                    <div className="rating-circle">
-                                        {result.rating}/10
-                                    </div>
-
-                                    <div style={{ marginBottom: '2rem' }}>
-                                        <h2>The Roast</h2>
-                                        <p style={{ fontSize: '1.1rem', color: '#fff' }}>
-                                            {result.roast}
+                                        <p style={{ margin: '0.3rem 0', display: 'flex', alignItems: 'center', gap: '8px', fontSize: '0.8rem' }}>
+                                            ✅ <span style={{ color: '#fff' }}><strong>3 Life-Changing Tips</strong></span>
+                                        </p>
+                                        <p style={{ margin: '0.3rem 0', display: 'flex', alignItems: 'center', gap: '8px', fontSize: '0.8rem' }}>
+                                            🔥 <span style={{ color: '#fff' }}><strong>Psychological Analysis</strong></span>
                                         </p>
                                     </div>
 
-                                    <div>
-                                        <h2>Tips to Un-Cringe</h2>
-                                        <ul className="tips-list">
-                                            {result.tips.map((tip, index) => (
-                                                <li key={index}>{tip}</li>
-                                            ))}
-                                        </ul>
-                                    </div>
+                                    <button className="btn" onClick={handleUnlock} style={{ transform: 'scale(1.05)', marginBottom: '0.5rem', boxShadow: '0 0 30px rgba(255, 68, 68, 0.4)', padding: '0.7rem 1.5rem', fontSize: '0.9rem' }}>
+                                        UNLOCK NOW • 2.99€
+                                    </button>
+
+                                    <p style={{ fontSize: '0.6rem', color: '#555', marginTop: '0.3rem' }}>
+                                        🔒 Secure Payment via Stripe
+                                    </p>
+                                </div>
+                            )}
+
+                            {/* Blurred Content (Visible underneath) */}
+                            <div style={{ filter: !isPaid ? 'blur(15px)' : 'none', opacity: !isPaid ? 0.5 : 1, transition: 'all 0.5s ease' }}>
+                                <div className="rating-circle">
+                                    {result.rating}/10
+                                </div>
+
+                                <div style={{ marginBottom: '2rem' }}>
+                                    <h2>The Roast</h2>
+                                    <p style={{ fontSize: '1.1rem', color: '#fff' }}>
+                                        {result.roast}
+                                    </p>
+                                </div>
+
+                                <div>
+                                    <h2>Tips to Un-Cringe</h2>
+                                    <ul className="tips-list">
+                                        {result.tips.map((tip, index) => (
+                                            <li key={index}>{tip}</li>
+                                        ))}
+                                    </ul>
                                 </div>
                             </div>
-                        )}
+                        </div>
                     </div>
                 )}
             </div>
