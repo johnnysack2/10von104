@@ -231,25 +231,47 @@ export default function Home() {
                                 left: 0,
                                 right: 0,
                                 bottom: 0,
-                                backdropFilter: 'blur(20px)',
-                                WebkitBackdropFilter: 'blur(20px)', /* Safari/iOS support */
+                                backdropFilter: 'blur(25px)',
+                                WebkitBackdropFilter: 'blur(25px)',
                                 background: 'rgba(0,0,0,0.85)',
                                 zIndex: 10,
                                 display: 'flex',
                                 flexDirection: 'column',
                                 alignItems: 'center',
                                 justifyContent: 'center',
-                                borderRadius: '10px'
+                                borderRadius: '10px',
+                                padding: '2rem',
+                                textAlign: 'center'
                             }}>
-                                <h2 style={{ fontSize: '2rem', marginBottom: '1rem', textShadow: '0 0 10px black' }}>
-                                    TOO BRUTAL TO SHOW
+                                <h2 style={{ fontSize: '2.5rem', marginBottom: '0.5rem', textShadow: '0 0 20px rgba(255,0,0,0.5)' }}>
+                                    🔒 LOCKED
                                 </h2>
-                                <p style={{ marginBottom: '2rem', fontSize: '1.2rem' }}>
-                                    Unlock the full roast for just 2.99€
+                                <p style={{ fontSize: '1.1rem', color: '#ccc', marginBottom: '2rem' }}>
+                                    The AI has generated a brutal analysis.
                                 </p>
-                                <button className="btn" onClick={handleUnlock}>
-                                    UNLOCK NOW 🔓
+
+                                <div style={{ textAlign: 'left', marginBottom: '2rem', background: 'rgba(255,255,255,0.05)', padding: '1.5rem', borderRadius: '10px', border: '1px solid rgba(255,255,255,0.1)' }}>
+                                    <p style={{ margin: '0.5rem 0', display: 'flex', alignItems: 'center', gap: '10px' }}>
+                                        ✅ <span><strong>Unhinged Roast</strong> (4-6 sentences)</span>
+                                    </p>
+                                    <p style={{ margin: '0.5rem 0', display: 'flex', alignItems: 'center', gap: '10px' }}>
+                                        ✅ <span><strong>Brutal Rating</strong> (1-10 Score)</span>
+                                    </p>
+                                    <p style={{ margin: '0.5rem 0', display: 'flex', alignItems: 'center', gap: '10px' }}>
+                                        ✅ <span><strong>3 Life-Changing Tips</strong></span>
+                                    </p>
+                                    <p style={{ margin: '0.5rem 0', display: 'flex', alignItems: 'center', gap: '10px' }}>
+                                        🔥 <span><strong>Psychological Analysis</strong></span>
+                                    </p>
+                                </div>
+
+                                <button className="btn" onClick={handleUnlock} style={{ transform: 'scale(1.1)', marginBottom: '1rem' }}>
+                                    UNLOCK NOW • 2.99€
                                 </button>
+
+                                <p style={{ fontSize: '0.8rem', color: '#666' }}>
+                                    🔒 Secure Payment via Stripe
+                                </p>
                             </div>
                         )}
 
