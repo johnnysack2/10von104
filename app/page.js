@@ -165,7 +165,7 @@ export default function Home() {
 
                 {result && (
                     <div style={{ marginTop: '0.5rem', animation: 'fadeIn 0.5s ease' }}>
-                        <div style={{ marginBottom: '0.2rem', padding: '0.8rem', background: 'rgba(20, 20, 20, 0.6)', border: '1px solid rgba(255, 68, 68, 0.3)', borderRadius: '15px', boxShadow: '0 0 30px rgba(255, 68, 68, 0.15)', backdropFilter: 'blur(10px)', textAlign: 'center', position: 'relative', overflow: 'hidden' }}>
+                        <div style={{ marginBottom: '0rem', padding: '0.8rem', background: 'rgba(20, 20, 20, 0.6)', border: '1px solid rgba(255, 68, 68, 0.3)', borderRadius: '15px', boxShadow: '0 0 30px rgba(255, 68, 68, 0.15)', backdropFilter: 'blur(10px)', textAlign: 'center', position: 'relative', overflow: 'hidden' }}>
                             <div style={{ position: 'absolute', top: '-50%', left: '-50%', width: '200%', height: '200%', background: 'radial-gradient(circle, rgba(255,68,68,0.1) 0%, rgba(0,0,0,0) 70%)', pointerEvents: 'none' }} />
                             <h3 style={{ color: '#ff4444', marginBottom: '0.2rem', textTransform: 'uppercase', fontSize: '0.55rem', letterSpacing: '2px', fontWeight: 'bold', animation: 'pulse 2s infinite', position: 'relative' }}>✨ AI First Impression</h3>
                             <p style={{ fontSize: '1rem', fontWeight: '600', fontStyle: 'italic', lineHeight: '1.3', color: '#fff', textShadow: '0 2px 10px rgba(0,0,0,0.5)', position: 'relative' }}>"{result.teaser_roast}"</p>
