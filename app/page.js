@@ -51,7 +51,7 @@ export default function Home() {
         "Scanning facial symmetry...",
         "Detecting insecurities...",
         "Analyzing fashion disasters...",
-        "Oh god... generating roast..."
+        "Oh god ... generating roast..."
     ];
 
     const handleSubmit = async () => {
@@ -129,13 +129,13 @@ export default function Home() {
     };
 
     return (
-        <main className="container" style={{ padding: result ? '0.8rem' : '2rem' }}>
-            <header style={{ textAlign: 'center', marginBottom: result ? '0.3rem' : '3rem', transition: 'all 0.5s ease' }}>
-                <h1 style={{ fontSize: result ? '1.3rem' : '3rem', margin: 0 }}>EGO ROASTER</h1>
+        <main className="container" style={{ padding: result ? '1rem' : '2rem' }}>
+            <header style={{ textAlign: 'center', marginBottom: result ? '0.5rem' : '3rem', transition: 'all 0.5s ease' }}>
+                <h1 style={{ fontSize: result ? '1.5rem' : '3rem', margin: 0 }}>EGO ROASTER</h1>
                 {!result && <p>Dare to see what the AI really thinks of you?</p>}
             </header>
 
-            <div className="card" style={{ padding: result ? '0.8rem' : '2rem', marginTop: result ? '0.3rem' : '2rem' }}>
+            <div className="card" style={{ padding: result ? '1rem' : '2rem', marginTop: result ? '0.5rem' : '2rem' }}>
                 {!preview ? (
                     <div className="upload-area" onDrop={handleDrop} onDragOver={handleDragOver} onClick={() => fileInputRef.current.click()}>
                         <input type="file" hidden ref={fileInputRef} onChange={handleFileChange} accept="image/*" />
@@ -144,7 +144,7 @@ export default function Home() {
                     </div>
                 ) : (
                     <div style={{ textAlign: 'center' }}>
-                        <img src={preview} alt="Preview" style={{ maxWidth: '100%', maxHeight: result ? '70px' : '400px', borderRadius: '8px', marginBottom: result ? '0.15rem' : '1rem', border: '1px solid #333', transition: 'all 0.5s ease', objectFit: 'contain' }} />
+                        <img src={preview} alt="Preview" style={{ maxWidth: '100%', maxHeight: result ? '120px' : '400px', borderRadius: '10px', marginBottom: result ? '0.5rem' : '1rem', border: '1px solid #333', transition: 'all 0.5s ease', objectFit: 'contain' }} />
                         {!result && (
                             <div style={{ display: 'flex', gap: '1rem', justifyContent: 'center' }}>
                                 <button className="btn" onClick={handleSubmit} disabled={loading}>{loading ? 'Roasting...' : 'ROAST ME'}</button>
@@ -164,40 +164,40 @@ export default function Home() {
                 {error && <div style={{ marginTop: '2rem', color: 'red', textAlign: 'center' }}>{error}</div>}
 
                 {result && (
-                    <div style={{ marginTop: '0rem', animation: 'fadeIn 0.5s ease' }}>
-                        <div style={{ marginBottom: '0.15rem', padding: '0.35rem', background: 'rgba(20, 20, 20, 0.6)', border: '1px solid rgba(255, 68, 68, 0.3)', borderRadius: '8px', boxShadow: '0 0 15px rgba(255, 68, 68, 0.1)', backdropFilter: 'blur(10px)', textAlign: 'center', position: 'relative', overflow: 'hidden' }}>
+                    <div style={{ marginTop: '0.5rem', animation: 'fadeIn 0.5s ease' }}>
+                        <div style={{ marginBottom: '0.6rem', padding: '0.8rem', background: 'rgba(20, 20, 20, 0.6)', border: '1px solid rgba(255, 68, 68, 0.3)', borderRadius: '15px', boxShadow: '0 0 30px rgba(255, 68, 68, 0.15)', backdropFilter: 'blur(10px)', textAlign: 'center', position: 'relative', overflow: 'hidden' }}>
                             <div style={{ position: 'absolute', top: '-50%', left: '-50%', width: '200%', height: '200%', background: 'radial-gradient(circle, rgba(255,68,68,0.1) 0%, rgba(0,0,0,0) 70%)', pointerEvents: 'none' }} />
-                            <h3 style={{ color: '#ff4444', marginBottom: '0.05rem', textTransform: 'uppercase', fontSize: '0.45rem', letterSpacing: '1px', fontWeight: 'bold', animation: 'pulse 2s infinite', position: 'relative' }}>✨ AI First Impression</h3>
-                            <p style={{ fontSize: '0.85rem', fontWeight: '600', fontStyle: 'italic', lineHeight: '1.15', color: '#fff', textShadow: '0 2px 10px rgba(0,0,0,0.5)', position: 'relative', margin: 0 }}>"{result.teaser_roast}"</p>
+                            <h3 style={{ color: '#ff4444', marginBottom: '0.2rem', textTransform: 'uppercase', fontSize: '0.55rem', letterSpacing: '2px', fontWeight: 'bold', animation: 'pulse 2s infinite', position: 'relative' }}>✨ AI First Impression</h3>
+                            <p style={{ fontSize: '1rem', fontWeight: '600', fontStyle: 'italic', lineHeight: '1.3', color: '#fff', textShadow: '0 2px 10px rgba(0,0,0,0.5)', position: 'relative' }}>"{result.teaser_roast}"</p>
                         </div>
 
-                        <div style={{ position: 'relative', minHeight: '300px', marginTop: '0rem' }}>
+                        <div style={{ position: 'relative', minHeight: '300px' }}>
                             {!isPaid && (
                                 <div style={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, background: 'rgba(0,0,0,0.5)', backdropFilter: 'blur(2px)', zIndex: 10, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', borderRadius: '15px', textAlign: 'center', padding: '0.8rem' }}>
-                                    <h2 style={{ fontSize: '1.8rem', marginBottom: '0.6rem', textShadow: '0 0 30px rgba(255,0,0,0.9)', color: '#fff', fontWeight: 'bold', display: 'flex', alignItems: 'center', gap: '8px' }}>
+                                    <h2 style={{ fontSize: '1.8rem', marginBottom: '0.35rem', textShadow: '0 0 30px rgba(255,0,0,0.9)', color: '#fff', fontWeight: 'bold', display: 'flex', alignItems: 'center', gap: '8px' }}>
                                         🔒 <span>LOCKED</span>
                                     </h2>
 
-                                    <div style={{ textAlign: 'left', marginBottom: '0.7rem', background: 'rgba(0,0,0,0.8)', padding: '0.6rem 0.8rem', borderRadius: '12px', border: '1px solid rgba(255,68,68,0.2)', width: '90%', maxWidth: '280px', boxShadow: '0 10px 30px rgba(0,0,0,0.5)' }}>
-                                        <p style={{ margin: '0.25rem 0', display: 'flex', alignItems: 'center', gap: '7px', fontSize: '0.8rem', color: '#eee' }}>
+                                    <div style={{ textAlign: 'left', marginBottom: '0.45rem', background: 'rgba(0,0,0,0.8)', padding: '0.6rem 0.8rem', borderRadius: '12px', border: '1px solid rgba(255,68,68,0.2)', width: '90%', maxWidth: '280px', boxShadow: '0 10px 30px rgba(0,0,0,0.5)' }}>
+                                        <p style={{ margin: '0.2rem 0', display: 'flex', alignItems: 'center', gap: '7px', fontSize: '0.8rem', color: '#eee' }}>
                                             💀 <span style={{ color: '#fff' }}><strong>Unhinged Roast</strong></span>
                                         </p>
-                                        <p style={{ margin: '0.25rem 0', display: 'flex', alignItems: 'center', gap: '7px', fontSize: '0.8rem', color: '#eee' }}>
+                                        <p style={{ margin: '0.2rem 0', display: 'flex', alignItems: 'center', gap: '7px', fontSize: '0.8rem', color: '#eee' }}>
                                             🔥 <span style={{ color: '#fff' }}><strong>Brutal Rating</strong> (1-10)</span>
                                         </p>
-                                        <p style={{ margin: '0.25rem 0', display: 'flex', alignItems: 'center', gap: '7px', fontSize: '0.8rem', color: '#eee' }}>
+                                        <p style={{ margin: '0.2rem 0', display: 'flex', alignItems: 'center', gap: '7px', fontSize: '0.8rem', color: '#eee' }}>
                                             🧬 <span style={{ color: '#fff' }}><strong>Psych Analysis</strong></span>
                                         </p>
-                                        <p style={{ margin: '0.25rem 0', display: 'flex', alignItems: 'center', gap: '7px', fontSize: '0.8rem', color: '#eee' }}>
+                                        <p style={{ margin: '0.2rem 0', display: 'flex', alignItems: 'center', gap: '7px', fontSize: '0.8rem', color: '#eee' }}>
                                             💡 <span style={{ color: '#fff' }}><strong>3 Tips</strong></span>
                                         </p>
                                     </div>
 
-                                    <button className="btn" onClick={handleUnlock} style={{ transform: 'scale(1.05)', marginBottom: '0.4rem', boxShadow: '0 0 30px rgba(255, 68, 68, 0.5)', padding: '0.85rem 1.6rem', fontSize: '0.92rem', fontWeight: 'bold', border: '1px solid #ff4444' }}>
+                                    <button className="btn" onClick={handleUnlock} style={{ transform: 'scale(1.05)', marginBottom: '0.25rem', boxShadow: '0 0 30px rgba(255, 68, 68, 0.5)', padding: '0.85rem 1.6rem', fontSize: '0.92rem', fontWeight: 'bold', border: '1px solid #ff4444' }}>
                                         UNLOCK NOW • 2.99€
                                     </button>
 
-                                    <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '0.25rem' }}>
+                                    <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '0.15rem' }}>
                                         <div style={{ display: 'flex', alignItems: 'center', gap: '4px', background: 'rgba(0,0,0,0.5)', padding: '0.15rem 0.5rem', borderRadius: '12px', border: '1px solid #222' }}>
                                             <span style={{ color: '#fbbf24', fontSize: '0.65rem' }}>★★★★★</span>
                                             <span style={{ color: '#aaa', fontSize: '0.65rem', fontWeight: 'bold' }}>4.9/5</span>
