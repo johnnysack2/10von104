@@ -1,10 +1,10 @@
 import Groq from "groq-sdk";
 import { NextResponse } from 'next/server';
 
-const groq = new Groq({ apiKey: process.env.GROQ_API_KEY });
-
 export async function POST(req) {
     try {
+        const groq = new Groq({ apiKey: process.env.GROQ_API_KEY });
+
         const { image } = await req.json();
 
         if (!image) {
