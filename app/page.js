@@ -144,7 +144,7 @@ export default function Home() {
                     </div>
                 ) : (
                     <div style={{ textAlign: 'center' }}>
-                        <img src={preview} alt="Preview" style={{ maxWidth: '100%', maxHeight: result ? '60px' : '400px', borderRadius: '8px', marginBottom: result ? '0.3rem' : '1rem', border: '1px solid #333', transition: 'all 0.5s ease', objectFit: 'contain' }} />
+                        <img src={preview} alt="Preview" style={{ maxWidth: '100%', maxHeight: result ? '100px' : '400px', borderRadius: '10px', marginBottom: result ? '0.4rem' : '1rem', border: '1px solid #333', transition: 'all 0.5s ease', objectFit: 'contain' }} />
                         {!result && (
                             <div style={{ display: 'flex', gap: '1rem', justifyContent: 'center' }}>
                                 <button className="btn" onClick={handleSubmit} disabled={loading}>{loading ? 'Roasting...' : 'ROAST ME'}</button>
@@ -164,45 +164,45 @@ export default function Home() {
                 {error && <div style={{ marginTop: '2rem', color: 'red', textAlign: 'center' }}>{error}</div>}
 
                 {result && (
-                    <div style={{ marginTop: '0.3rem', animation: 'fadeIn 0.5s ease' }}>
-                        <div style={{ marginBottom: '0rem', padding: '0.5rem', background: 'rgba(20, 20, 20, 0.6)', border: '1px solid rgba(255, 68, 68, 0.3)', borderRadius: '10px', boxShadow: '0 0 20px rgba(255, 68, 68, 0.1)', backdropFilter: 'blur(10px)', textAlign: 'center', position: 'relative', overflow: 'hidden' }}>
+                    <div style={{ marginTop: '0.4rem', animation: 'fadeIn 0.5s ease' }}>
+                        <div style={{ marginBottom: '0rem', padding: '0.7rem', background: 'rgba(20, 20, 20, 0.6)', border: '1px solid rgba(255, 68, 68, 0.3)', borderRadius: '12px', boxShadow: '0 0 25px rgba(255, 68, 68, 0.15)', backdropFilter: 'blur(10px)', textAlign: 'center', position: 'relative', overflow: 'hidden' }}>
                             <div style={{ position: 'absolute', top: '-50%', left: '-50%', width: '200%', height: '200%', background: 'radial-gradient(circle, rgba(255,68,68,0.1) 0%, rgba(0,0,0,0) 70%)', pointerEvents: 'none' }} />
-                            <h3 style={{ color: '#ff4444', marginBottom: '0.1rem', textTransform: 'uppercase', fontSize: '0.5rem', letterSpacing: '1.5px', fontWeight: 'bold', animation: 'pulse 2s infinite', position: 'relative' }}>✨ AI First Impression</h3>
-                            <p style={{ fontSize: '0.9rem', fontWeight: '600', fontStyle: 'italic', lineHeight: '1.2', color: '#fff', textShadow: '0 2px 10px rgba(0,0,0,0.5)', position: 'relative', margin: 0 }}>"{result.teaser_roast}"</p>
+                            <h3 style={{ color: '#ff4444', marginBottom: '0.15rem', textTransform: 'uppercase', fontSize: '0.52rem', letterSpacing: '1.8px', fontWeight: 'bold', animation: 'pulse 2s infinite', position: 'relative' }}>✨ AI First Impression</h3>
+                            <p style={{ fontSize: '0.95rem', fontWeight: '600', fontStyle: 'italic', lineHeight: '1.25', color: '#fff', textShadow: '0 2px 10px rgba(0,0,0,0.5)', position: 'relative', margin: 0 }}>"{result.teaser_roast}"</p>
                         </div>
 
-                        <div style={{ position: 'relative', minHeight: '260px' }}>
+                        <div style={{ position: 'relative', minHeight: '270px' }}>
                             {!isPaid && (
-                                <div style={{ position: 'absolute', top: '-20px', left: 0, right: 0, bottom: 0, background: 'rgba(0,0,0,0.5)', backdropFilter: 'blur(2px)', zIndex: 10, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', borderRadius: '12px', textAlign: 'center', padding: '0.6rem' }}>
-                                    <h2 style={{ fontSize: '1.6rem', marginBottom: '0.3rem', textShadow: '0 0 25px rgba(255,0,0,0.9)', color: '#fff', fontWeight: 'bold', display: 'flex', alignItems: 'center', gap: '7px' }}>
+                                <div style={{ position: 'absolute', top: '-15px', left: 0, right: 0, bottom: 0, background: 'rgba(0,0,0,0.5)', backdropFilter: 'blur(2px)', zIndex: 10, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', borderRadius: '12px', textAlign: 'center', padding: '0.7rem' }}>
+                                    <h2 style={{ fontSize: '1.7rem', marginBottom: '0.35rem', textShadow: '0 0 28px rgba(255,0,0,0.9)', color: '#fff', fontWeight: 'bold', display: 'flex', alignItems: 'center', gap: '7px' }}>
                                         🔒 <span>LOCKED</span>
                                     </h2>
 
-                                    <div style={{ textAlign: 'left', marginBottom: '0.4rem', background: 'rgba(0,0,0,0.8)', padding: '0.5rem 0.7rem', borderRadius: '10px', border: '1px solid rgba(255,68,68,0.2)', width: '90%', maxWidth: '270px', boxShadow: '0 8px 25px rgba(0,0,0,0.5)' }}>
-                                        <p style={{ margin: '0.15rem 0', display: 'flex', alignItems: 'center', gap: '6px', fontSize: '0.75rem', color: '#eee' }}>
+                                    <div style={{ textAlign: 'left', marginBottom: '0.45rem', background: 'rgba(0,0,0,0.8)', padding: '0.55rem 0.75rem', borderRadius: '11px', border: '1px solid rgba(255,68,68,0.2)', width: '90%', maxWidth: '275px', boxShadow: '0 9px 28px rgba(0,0,0,0.5)' }}>
+                                        <p style={{ margin: '0.18rem 0', display: 'flex', alignItems: 'center', gap: '6px', fontSize: '0.78rem', color: '#eee' }}>
                                             💀 <span style={{ color: '#fff' }}><strong>Unhinged Roast</strong></span>
                                         </p>
-                                        <p style={{ margin: '0.15rem 0', display: 'flex', alignItems: 'center', gap: '6px', fontSize: '0.75rem', color: '#eee' }}>
+                                        <p style={{ margin: '0.18rem 0', display: 'flex', alignItems: 'center', gap: '6px', fontSize: '0.78rem', color: '#eee' }}>
                                             🔥 <span style={{ color: '#fff' }}><strong>Brutal Rating</strong> (1-10)</span>
                                         </p>
-                                        <p style={{ margin: '0.15rem 0', display: 'flex', alignItems: 'center', gap: '6px', fontSize: '0.75rem', color: '#eee' }}>
+                                        <p style={{ margin: '0.18rem 0', display: 'flex', alignItems: 'center', gap: '6px', fontSize: '0.78rem', color: '#eee' }}>
                                             🧬 <span style={{ color: '#fff' }}><strong>Psych Analysis</strong></span>
                                         </p>
-                                        <p style={{ margin: '0.15rem 0', display: 'flex', alignItems: 'center', gap: '6px', fontSize: '0.75rem', color: '#eee' }}>
+                                        <p style={{ margin: '0.18rem 0', display: 'flex', alignItems: 'center', gap: '6px', fontSize: '0.78rem', color: '#eee' }}>
                                             💡 <span style={{ color: '#fff' }}><strong>3 Tips</strong></span>
                                         </p>
                                     </div>
 
-                                    <button className="btn" onClick={handleUnlock} style={{ transform: 'scale(1.02)', marginBottom: '0.2rem', boxShadow: '0 0 25px rgba(255, 68, 68, 0.5)', padding: '0.75rem 1.4rem', fontSize: '0.85rem', fontWeight: 'bold', border: '1px solid #ff4444' }}>
+                                    <button className="btn" onClick={handleUnlock} style={{ transform: 'scale(1.03)', marginBottom: '0.25rem', boxShadow: '0 0 28px rgba(255, 68, 68, 0.5)', padding: '0.8rem 1.5rem', fontSize: '0.88rem', fontWeight: 'bold', border: '1px solid #ff4444' }}>
                                         UNLOCK NOW • 2.99€
                                     </button>
 
-                                    <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '0.1rem' }}>
-                                        <div style={{ display: 'flex', alignItems: 'center', gap: '3px', background: 'rgba(0,0,0,0.5)', padding: '0.12rem 0.45rem', borderRadius: '10px', border: '1px solid #222' }}>
-                                            <span style={{ color: '#fbbf24', fontSize: '0.6rem' }}>★★★★★</span>
-                                            <span style={{ color: '#aaa', fontSize: '0.6rem', fontWeight: 'bold' }}>4.9/5</span>
+                                    <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '0.12rem' }}>
+                                        <div style={{ display: 'flex', alignItems: 'center', gap: '3px', background: 'rgba(0,0,0,0.5)', padding: '0.13rem 0.48rem', borderRadius: '11px', border: '1px solid #222' }}>
+                                            <span style={{ color: '#fbbf24', fontSize: '0.62rem' }}>★★★★★</span>
+                                            <span style={{ color: '#aaa', fontSize: '0.62rem', fontWeight: 'bold' }}>4.9/5</span>
                                         </div>
-                                        <p style={{ fontSize: '0.55rem', color: '#666', margin: 0 }}>🔒 Secure via Stripe</p>
+                                        <p style={{ fontSize: '0.58rem', color: '#666', margin: 0 }}>🔒 Secure via Stripe</p>
                                     </div>
                                 </div>
                             )}
