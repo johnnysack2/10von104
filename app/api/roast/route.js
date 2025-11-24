@@ -63,10 +63,18 @@ Return ONLY the JSON.`;
         return NextResponse.json(data);
     } catch (error) {
         console.error('Error roasting image:', error);
+
+        // Check if API key is missing (without revealing it)
+        const hasKey = !!process.env.GEMINI_API_KEY;
+        const keyStatus = hasKey ? `Present (Length: ${process.env.GEMINI_API_KEY.length})` : 'Missing';
+
         return NextResponse.json({
             error: 'Failed to roast image',
             details: error.message,
-            stack: error.stack
+            stack: error.stack,
+            envCheck: {
+                GEMINI_API_KEY: keyStatus
+            }
         }, { status: 500 });
     }
 }

@@ -92,7 +92,11 @@ export default function Home() {
                 if (response.ok) {
                     setResult(data);
                 } else {
-                    setError(data.error || 'Something went wrong');
+                    console.error("API Error Details:", data);
+                    const errorMsg = data.details
+                        ? `${data.error}: ${data.details} (Key: ${data.envCheck?.GEMINI_API_KEY || 'Unknown'})`
+                        : (data.error || 'Something went wrong');
+                    setError(errorMsg);
                 }
                 setLoading(false);
             };
