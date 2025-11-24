@@ -1,53 +1,57 @@
-import { GoogleGenerativeAI } from "@google/generative-ai";
 import { NextResponse } from 'next/server';
-
-const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
 
 export async function POST(req) {
     try {
-        const apiKey = process.env.GEMINI_API_KEY;
-        if (!apiKey) {
-            console.error("GEMINI_API_KEY is missing in environment variables.");
-            return NextResponse.json({ error: 'Server configuration error: API Key missing. Please restart the server.' }, { status: 500 });
-        }
-
         const { image } = await req.json();
 
         if (!image) {
             return NextResponse.json({ error: 'No image provided' }, { status: 400 });
         }
 
-        // We need to extract the base64 part
-        const base64Data = image.split(',')[1];
-        const mimeType = image.split(';')[0].split(':')[1];
+        const prompt = `You are a brutal, cynical, but hilarious roast master. You are analyzing a user's Tinder profile or Instagram feed.
+Your goal is to destroy their ego but also give them helpful advice.
 
-        const model = genAI.getGenerativeModel({ model: "gemini-2.0-flash" });
+Output a JSON object with the following keys:
+- rating: A number from 1 to 10 (be harsh).
+- roast: A short, biting paragraph roasting the user based on the image. Make it personal and specific to what you see.
+- tips: An array of 3 specific, actionable tips to improve their profile/feed.
 
-        const prompt = `
-    You are a brutal, cynical, but hilarious roast master. You are analyzing a user's Tinder profile or Instagram feed.
-    Your goal is to destroy their ego but also give them helpful advice.
-    
-    Output a JSON object with the following keys:
-    - rating: A number from 1 to 10 (be harsh).
-    - roast: A short, biting paragraph roasting the user based on the image. Make it personal and specific to what you see.
-    - tips: An array of 3 specific, actionable tips to improve their profile/feed.
-    
-    Do not hold back. Be "mean" but funny.
-    Return ONLY the JSON.
-    `;
+Do not hold back. Be "mean" but funny.
+Return ONLY the JSON.`;
 
-        const result = await model.generateContent([
-            prompt,
-            {
-                inlineData: {
-                    data: base64Data,
-                    mimeType: mimeType
+        // Call Puter.js API directly from server
+        const response = await fetch('https://api.puter.com/drivers/call', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                interface: 'puter-chat-completion',
+                driver: 'gemini',
+                method: 'complete',
+                args: {
+                    messages: [
+                        {
+                            role: 'user',
+                            content: [
+                                { type: 'text', text: prompt },
+                                { type: 'image_url', image_url: { url: image } }
+                            ]
+                        }
+                    ],
+                    model: 'gemini-2.0-flash'
                 }
-            }
-        ]);
+            })
+        });
 
-        const responseText = result.response.text();
-        console.log("Raw Gemini response:", responseText);
+        if (!response.ok) {
+            throw new Error(`Puter API error: ${response.statusText}`);
+        }
+
+        const result = await response.json();
+        const responseText = result.message?.content || '';
+
+        console.log("Raw Puter response:", responseText);
 
         // Clean up markdown code blocks if present
         let jsonString = responseText.replace(/```json\n?|```/g, "").trim();
