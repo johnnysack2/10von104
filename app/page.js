@@ -173,7 +173,7 @@ export default function Home() {
 
                         <div style={{ position: 'relative', minHeight: '300px' }}>
                             {!isPaid && (
-                                <div style={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, background: 'rgba(0,0,0,0.5)', backdropFilter: 'blur(2px)', zIndex: 10, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', borderRadius: '15px', textAlign: 'center', padding: '0.8rem' }}>
+                                <div style={{ position: 'absolute', top: '-20px', left: 0, right: 0, bottom: 0, background: 'rgba(0,0,0,0.5)', backdropFilter: 'blur(2px)', zIndex: 10, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', borderRadius: '15px', textAlign: 'center', padding: '0.8rem' }}>
                                     <h2 style={{ fontSize: '1.8rem', marginBottom: '0.35rem', textShadow: '0 0 30px rgba(255,0,0,0.9)', color: '#fff', fontWeight: 'bold', display: 'flex', alignItems: 'center', gap: '8px' }}>
                                         🔒 <span>LOCKED</span>
                                     </h2>
