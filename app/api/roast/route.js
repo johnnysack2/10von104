@@ -1,20 +1,17 @@
-import OpenAI from 'openai';
+import Groq from "groq-sdk";
 import { NextResponse } from 'next/server';
+
+const groq = new Groq({ apiKey: process.env.GROQ_API_KEY });
 
 export async function POST(req) {
     try {
-        // Initialize OpenAI at runtime, not build time
-        const openai = new OpenAI({
-            apiKey: process.env.OPENAI_API_KEY
-        });
         const { image } = await req.json();
 
         if (!image) {
             return NextResponse.json({ error: 'No image provided' }, { status: 400 });
         }
 
-        const response = await openai.chat.completions.create({
-            model: "gpt-4o",
+        const completion = await groq.chat.completions.create({
             messages: [
                 {
                     role: "user",
@@ -41,26 +38,23 @@ Return ONLY the JSON.`
                     ]
                 }
             ],
-            max_tokens: 500
+            model: "llama-3.2-11b-vision-preview",
+            temperature: 0.7,
+            max_tokens: 1024,
+            top_p: 1,
+            stream: false,
+            response_format: { type: "json_object" }
         });
 
-        const responseText = response.choices[0].message.content;
-        console.log("Raw OpenAI response:", responseText);
-
-        let jsonString = responseText.replace(/```json\n?|```/g, "").trim();
-
-        const firstOpen = jsonString.indexOf('{');
-        const lastClose = jsonString.lastIndexOf('}');
-        if (firstOpen !== -1 && lastClose !== -1) {
-            jsonString = jsonString.substring(firstOpen, lastClose + 1);
-        }
+        const responseText = completion.choices[0].message.content;
+        console.log("Raw Groq response:", responseText);
 
         let data;
         try {
-            data = JSON.parse(jsonString);
+            data = JSON.parse(responseText);
         } catch (parseError) {
             console.error("JSON Parse Error:", parseError);
-            console.error("Failed JSON string:", jsonString);
+            console.error("Failed JSON string:", responseText);
             return NextResponse.json({ error: 'Failed to parse AI response', details: responseText }, { status: 500 });
         }
 
