@@ -74,10 +74,7 @@ export default function Home() {
             reader.onload = async () => {
                 const base64Image = reader.result;
 
-                // Create a promise for the minimum delay (6 seconds)
                 const delayPromise = new Promise(resolve => setTimeout(resolve, 6000));
-
-                // Add a timeout to the fetch (e.g., 50 seconds)
                 const controller = new AbortController();
                 const timeoutId = setTimeout(() => controller.abort(), 50000);
 
@@ -100,7 +97,6 @@ export default function Home() {
                     if (contentType && contentType.indexOf("application/json") !== -1) {
                         data = await response.json();
                     } else {
-                        const text = await response.text();
                         throw new Error(`Server returned non-JSON response: ${response.status} ${response.statusText}`);
                     }
                 } catch (error) {
@@ -229,7 +225,7 @@ export default function Home() {
                 {result && (
                     <div style={{ marginTop: '0.5rem', animation: 'fadeIn 0.5s ease' }}>
 
-                        {/* FREE TEASER - Premium Glass Card */}
+                        {/* FREE TEASER */}
                         <div style={{
                             marginBottom: '1rem',
                             padding: '1rem',
@@ -275,7 +271,7 @@ export default function Home() {
                             </p>
                         </div>
 
-                        {/* LOCKED CONTENT - ALWAYS VISIBLE */}
+                        {/* LOCKED CONTENT */}
                         <div style={{ position: 'relative' }}>
 
                             {/* Paywall Overlay */}
@@ -297,25 +293,25 @@ export default function Home() {
                                     borderRadius: '20px',
                                     textAlign: 'center'
                                 }}>
-                                    <h2 style={{ fontSize: '1.5rem', marginBottom: '0.2rem', textShadow: '0 0 30px rgba(255,0,0,0.6)', color: '#fff' }}>
-                                        ✨ ANALYSIS READY
+                                    <h2 style={{ fontSize: '2rem', marginBottom: '0.2rem', textShadow: '0 0 30px rgba(255,0,0,0.8)', color: '#fff', fontWeight: 'bold' }}>
+                                        🔒 LOCKED
                                     </h2>
-                                    <p style={{ fontSize: '0.8rem', color: '#aaa', marginBottom: '1rem' }}>
-                                        Your full report is generated.
+                                    <p style={{ fontSize: '0.75rem', color: '#aaa', marginBottom: '1rem' }}>
+                                        Brutal analysis generated.
                                     </p>
 
-                                    <div style={{ textAlign: 'left', marginBottom: '1rem', background: 'rgba(255,255,255,0.03)', padding: '0.8rem', borderRadius: '10px', border: '1px solid rgba(255,255,255,0.05)', width: '90%', maxWidth: '300px' }}>
-                                        <p style={{ margin: '0.3rem 0', display: 'flex', alignItems: 'center', gap: '8px', fontSize: '0.8rem' }}>
-                                            ✅ <span style={{ color: '#fff' }}><strong>Unhinged Roast</strong> (Full)</span>
+                                    <div style={{ textAlign: 'left', marginBottom: '1rem', background: 'rgba(255,255,255,0.02)', padding: '0.8rem', borderRadius: '10px', border: '1px solid rgba(255,255,255,0.05)', width: '90%', maxWidth: '300px' }}>
+                                        <p style={{ margin: '0.3rem 0', display: 'flex', alignItems: 'center', gap: '8px', fontSize: '0.8rem', color: '#ddd' }}>
+                                            <span style={{ color: '#ff4444', fontWeight: 'bold' }}>✓</span> <span><strong>Unhinged Roast</strong> (Full)</span>
                                         </p>
-                                        <p style={{ margin: '0.3rem 0', display: 'flex', alignItems: 'center', gap: '8px', fontSize: '0.8rem' }}>
-                                            ✅ <span style={{ color: '#fff' }}><strong>Brutal Rating</strong> (1-10)</span>
+                                        <p style={{ margin: '0.3rem 0', display: 'flex', alignItems: 'center', gap: '8px', fontSize: '0.8rem', color: '#ddd' }}>
+                                            <span style={{ color: '#ff4444', fontWeight: 'bold' }}>✓</span> <span><strong>Brutal Rating</strong> (1-10)</span>
                                         </p>
-                                        <p style={{ margin: '0.3rem 0', display: 'flex', alignItems: 'center', gap: '8px', fontSize: '0.8rem' }}>
-                                            ✅ <span style={{ color: '#fff' }}><strong>3 Life-Changing Tips</strong></span>
+                                        <p style={{ margin: '0.3rem 0', display: 'flex', alignItems: 'center', gap: '8px', fontSize: '0.8rem', color: '#ddd' }}>
+                                            <span style={{ color: '#ff4444', fontWeight: 'bold' }}>✓</span> <span><strong>3 Life-Changing Tips</strong></span>
                                         </p>
-                                        <p style={{ margin: '0.3rem 0', display: 'flex', alignItems: 'center', gap: '8px', fontSize: '0.8rem' }}>
-                                            🔥 <span style={{ color: '#fff' }}><strong>Psychological Analysis</strong></span>
+                                        <p style={{ margin: '0.3rem 0', display: 'flex', alignItems: 'center', gap: '8px', fontSize: '0.8rem', color: '#ddd' }}>
+                                            <span style={{ color: '#ff4444', fontWeight: 'bold' }}>✓</span> <span><strong>Psychological Analysis</strong></span>
                                         </p>
                                     </div>
 
@@ -329,8 +325,31 @@ export default function Home() {
                                 </div>
                             )}
 
-                            {/* Blurred Content (Visible underneath) */}
-                            <div style={{ filter: !isPaid ? 'blur(15px)' : 'none', opacity: !isPaid ? 0.5 : 1, transition: 'all 0.5s ease' }}>
+                            {/* Blurred Content with fake background text */}
+                            <div style={{
+                                filter: !isPaid ? 'blur(20px)' : 'none',
+                                opacity: !isPaid ? 0.3 : 1,
+                                transition: 'all 0.5s ease',
+                                position: 'relative'
+                            }}>
+                                {!isPaid && (
+                                    <div style={{
+                                        position: 'absolute',
+                                        top: 0,
+                                        left: 0,
+                                        right: 0,
+                                        bottom: 0,
+                                        zIndex: -1,
+                                        overflow: 'hidden',
+                                        color: '#fff',
+                                        fontSize: '1rem',
+                                        lineHeight: '1.6',
+                                        padding: '1rem'
+                                    }}>
+                                        <p>Your appearance screams desperation for validation. Every pixel of your carefully curated image reeks of insecurity masked as confidence. The way you present yourself online is a masterclass in self-delusion. Your fashion choices suggest someone stuck between who they were five years ago and who they'll never become. That forced smile can't hide the emptiness behind your eyes. Your entire aesthetic is a desperate cry for attention wrapped in a thin veneer of "not caring what people think." The gaps between your self-perception and reality could fill an ocean.</p>
+                                    </div>
+                                )}
+
                                 <div className="rating-circle">
                                     {result.rating}/10
                                 </div>
