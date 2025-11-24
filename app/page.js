@@ -136,32 +136,227 @@ export default function Home() {
             setLoading(false);
         }
     };
-    <div style={{ filter: !isPaid ? 'blur(15px)' : 'none', opacity: !isPaid ? 0.5 : 1, transition: 'all 0.5s ease' }}>
-        <div className="rating-circle">
-            {result.rating}/10
-        </div>
+    const handleUnlock = () => {
+        window.location.href = 'https://buy.stripe.com/5kQ7sL3PU9vF7WOfRM2go00';
+    };
 
-        <div style={{ marginBottom: '2rem' }}>
-            <h2>The Roast</h2>
-            <p style={{ fontSize: '1.1rem', color: '#fff' }}>
-                {result.roast}
-            </p>
-        </div>
+    return (
+        <main className="container" style={{ padding: result ? '1rem' : '2rem' }}>
+            <header style={{ textAlign: 'center', marginBottom: result ? '0.5rem' : '3rem', transition: 'all 0.5s ease' }}>
+                <h1 style={{ fontSize: result ? '1.5rem' : '3rem', margin: 0 }}>EGO ROASTER</h1>
+                {!result && <p>Dare to see what the AI really thinks of you?</p>}
+            </header>
 
-        <div>
-            <h2>Tips to Un-Cringe</h2>
-            <ul className="tips-list">
-                {result.tips.map((tip, index) => (
-                    <li key={index}>{tip}</li>
-                ))}
-            </ul>
-        </div>
-    </div>
-                        </div >
-                    </div >
-                )
-}
-            </div >
-        </main >
+            <div className="card" style={{ padding: result ? '1rem' : '2rem', marginTop: result ? '0.5rem' : '2rem' }}>
+                {!preview ? (
+                    <div
+                        className="upload-area"
+                        onDrop={handleDrop}
+                        onDragOver={handleDragOver}
+                        onClick={() => fileInputRef.current.click()}
+                    >
+                        <input
+                            type="file"
+                            hidden
+                            ref={fileInputRef}
+                            onChange={handleFileChange}
+                            accept="image/*"
+                        />
+                        <p style={{ fontSize: '1.2rem', fontWeight: 'bold', color: '#fff' }}>
+                            Drop your screenshot here
+                        </p>
+                        <p style={{ fontSize: '0.9rem', marginTop: '0.5rem' }}>
+                            or click to browse
+                        </p>
+                    </div>
+                ) : (
+                    <div style={{ textAlign: 'center' }}>
+                        <img
+                            src={preview}
+                            alt="Preview"
+                            style={{
+                                maxWidth: '100%',
+                                maxHeight: result ? '120px' : '400px', // Aggressive shrink
+                                borderRadius: '10px',
+                                marginBottom: result ? '0.5rem' : '1rem',
+                                border: '1px solid #333',
+                                transition: 'all 0.5s ease',
+                                objectFit: 'contain'
+                            }}
+                        />
+
+                        {/* Hide buttons when result is shown to save space */}
+                        {!result && (
+                            <div style={{ display: 'flex', gap: '1rem', justifyContent: 'center' }}>
+                                <button
+                                    className="btn"
+                                    onClick={handleSubmit}
+                                    disabled={loading}
+                                >
+                                    {loading ? 'Roasting...' : 'ROAST ME'}
+                                </button>
+                                <button
+                                    className="btn"
+                                    style={{ background: '#333', boxShadow: 'none' }}
+                                    onClick={() => {
+                                        setFile(null);
+                                        setPreview(null);
+                                        setResult(null);
+                                    }}
+                                    disabled={loading}
+                                >
+                                    Reset
+                                </button>
+                            </div>
+                        )}
+                    </div>
+                )}
+
+                {loading && (
+                    <div style={{ marginTop: '3rem', textAlign: 'center' }}>
+                        <div className="loader"></div>
+                        <p className="loading-text">
+                            {loadingMsg}
+                        </p>
+                    </div>
+                )}
+
+                {error && (
+                    <div style={{ marginTop: '2rem', color: 'red', textAlign: 'center' }}>
+                        {error}
+                    </div>
+                )}
+
+                {result && (
+                    <div style={{ marginTop: '0.5rem', animation: 'fadeIn 0.5s ease' }}>
+
+                        {/* FREE TEASER - Premium Glass Card */}
+                        <div style={{
+                            marginBottom: '1rem',
+                            padding: '1rem',
+                            background: 'rgba(20, 20, 20, 0.6)',
+                            border: '1px solid rgba(255, 68, 68, 0.3)',
+                            borderRadius: '15px',
+                            boxShadow: '0 0 30px rgba(255, 68, 68, 0.15)',
+                            backdropFilter: 'blur(10px)',
+                            textAlign: 'center',
+                            position: 'relative',
+                            overflow: 'hidden'
+                        }}>
+                            {/* Glow Effect Background */}
+                            <div style={{
+                                position: 'absolute',
+                                top: '-50%',
+                                left: '-50%',
+                                width: '200%',
+                                height: '200%',
+                                background: 'radial-gradient(circle, rgba(255,68,68,0.1) 0%, rgba(0,0,0,0) 70%)',
+                                pointerEvents: 'none'
+                            }} />
+
+                            <h3 style={{
+                                color: '#ff4444',
+                                marginBottom: '0.3rem',
+                                textTransform: 'uppercase',
+                                fontSize: '0.6rem',
+                                letterSpacing: '2px',
+                                fontWeight: 'bold',
+                                animation: 'pulse 2s infinite'
+                            }}>
+                                ✨ AI First Impression
+                            </h3>
+                            <p style={{
+                                fontSize: '1.1rem',
+                                fontWeight: '600',
+                                fontStyle: 'italic',
+                                lineHeight: '1.3',
+                                color: '#fff',
+                                textShadow: '0 2px 10px rgba(0,0,0,0.5)'
+                            }}>
+                                "{result.teaser_roast}"
+                            </p>
+                        </div>
+
+                        {/* LOCKED CONTENT CONTAINER */}
+                        <div style={{ position: 'relative' }}>
+
+                            {/* Paywall Overlay */}
+                            {!isPaid && (
+                                <div style={{
+                                    position: 'absolute',
+                                    top: '-5px',
+                                    left: '-10px',
+                                    right: '-10px',
+                                    bottom: '-10px',
+                                    background: 'linear-gradient(to bottom, rgba(0,0,0,0) 0%, rgba(0,0,0,0.95) 10%, #000 100%)',
+                                    backdropFilter: 'blur(10px)',
+                                    zIndex: 10,
+                                    display: 'flex',
+                                    flexDirection: 'column',
+                                    alignItems: 'center',
+                                    justifyContent: 'flex-start', // ALIGN TO TOP
+                                    paddingTop: '2rem', // Push down slightly from top edge
+                                    borderRadius: '20px',
+                                    textAlign: 'center'
+                                }}>
+                                    <h2 style={{ fontSize: '1.8rem', marginBottom: '0.2rem', textShadow: '0 0 30px rgba(255,0,0,0.6)', color: '#fff' }}>
+                                        🔒 LOCKED
+                                    </h2>
+                                    <p style={{ fontSize: '0.8rem', color: '#aaa', marginBottom: '1rem' }}>
+                                        Brutal analysis generated.
+                                    </p>
+
+                                    <div style={{ textAlign: 'left', marginBottom: '1rem', background: 'rgba(255,255,255,0.03)', padding: '0.8rem', borderRadius: '10px', border: '1px solid rgba(255,255,255,0.05)', width: '90%', maxWidth: '300px' }}>
+                                        <p style={{ margin: '0.3rem 0', display: 'flex', alignItems: 'center', gap: '8px', fontSize: '0.8rem' }}>
+                                            ✅ <span style={{ color: '#fff' }}><strong>Unhinged Roast</strong> (Full)</span>
+                                        </p>
+                                        <p style={{ margin: '0.3rem 0', display: 'flex', alignItems: 'center', gap: '8px', fontSize: '0.8rem' }}>
+                                            ✅ <span style={{ color: '#fff' }}><strong>Brutal Rating</strong> (1-10)</span>
+                                        </p>
+                                        <p style={{ margin: '0.3rem 0', display: 'flex', alignItems: 'center', gap: '8px', fontSize: '0.8rem' }}>
+                                            ✅ <span style={{ color: '#fff' }}><strong>3 Life-Changing Tips</strong></span>
+                                        </p>
+                                        <p style={{ margin: '0.3rem 0', display: 'flex', alignItems: 'center', gap: '8px', fontSize: '0.8rem' }}>
+                                            🔥 <span style={{ color: '#fff' }}><strong>Psychological Analysis</strong></span>
+                                        </p>
+                                    </div>
+
+                                    <button className="btn" onClick={handleUnlock} style={{ transform: 'scale(1.05)', marginBottom: '0.5rem', boxShadow: '0 0 30px rgba(255, 68, 68, 0.4)', padding: '0.7rem 1.5rem', fontSize: '0.9rem' }}>
+                                        UNLOCK NOW • 2.99€
+                                    </button>
+
+                                    <p style={{ fontSize: '0.6rem', color: '#555', marginTop: '0.3rem' }}>
+                                        🔒 Secure Payment via Stripe
+                                    </p>
+                                </div>
+                            )}
+
+                            {/* Blurred Content (Visible underneath) */}
+                            <div style={{ filter: !isPaid ? 'blur(15px)' : 'none', opacity: !isPaid ? 0.5 : 1, transition: 'all 0.5s ease' }}>
+                                <div className="rating-circle">
+                                    {result.rating}/10
+                                </div>
+
+                                <div style={{ marginBottom: '2rem' }}>
+                                    <h2>The Roast</h2>
+                                    <p style={{ fontSize: '1.1rem', color: '#fff' }}>
+                                        {result.roast}
+                                    </p>
+                                </div>
+
+                                <div>
+                                    <h2>Tips to Un-Cringe</h2>
+                                    <ul className="tips-list">
+                                        {result.tips.map((tip, index) => (
+                                            <li key={index}>{tip}</li>
+                                        ))}
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                )}
+            </div>
+        </main>
     );
 }
