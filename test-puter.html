@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <script src="https://js.puter.com/v2/"></script>
+</head>
+<body>
+    <h1>Puter.js Test</h1>
+    <input type="file" id="fileInput" accept="image/*">
+    <button onclick="testRoast()">Test Roast</button>
+    <div id="output"></div>
+
+    <script>
+        async function testRoast() {
+            const file = document.getElementById('fileInput').files[0];
+            if (!file) {
+                alert('Please select an image first');
+                return;
+            }
+
+            const reader = new FileReader();
+            reader.onload = async (e) => {
+                const base64Image = e.target.result;
+                document.getElementById('output').innerHTML = 'Loading...';
+
+                try {
+                    const prompt = `Rate this image 1-10. Return JSON with: rating (number), roast (string), tips (array of 3 strings).`;
+                    
+                    const response = await window.puter.ai.chat(
+                        prompt,
+                        base64Image,
+                        { model: 'gemini-2.0-flash' }
+                    );
+
+                    document.getElementById('output').innerHTML = '<pre>' + JSON.stringify(response, null, 2) + '</pre>';
+                } catch (error) {
+                    document.getElementById('output').innerHTML = '<pre style="color:red">Error: ' + error.message + '</pre>';
+                    console.error(error);
+                }
+            };
+            reader.readAsDataURL(file);
+        }
+    </script>
+</body>
+</html>
