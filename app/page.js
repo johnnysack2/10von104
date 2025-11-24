@@ -66,6 +66,64 @@ export default function Home() {
         const msgInterval = setInterval(() => {
             msgIndex = (msgIndex + 1) % loadingMessages.length;
             setLoadingMsg(loadingMessages[msgIndex]);
+        }, 1000);
+
+        try {
+            const reader = new FileReader();
+            reader.readAsDataURL(file);
+            reader.onload = async () => {
+                const base64Image = reader.result;
+
+                // Create a promise for the minimum delay (6 seconds)
+                const delayPromise = new Promise(resolve => setTimeout(resolve, 6000));
+
+                // Add a timeout to the fetch (e.g., 50 seconds)
+                const controller = new AbortController();
+                const timeoutId = setTimeout(() => controller.abort(), 50000);
+
+                const fetchPromise = fetch('/api/roast', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ image: base64Image }),
+                    signal: controller.signal
+                });
+
+                let response, data;
+                try {
+                    const [_, fetchRes] = await Promise.all([delayPromise, fetchPromise]);
+                    response = fetchRes;
+                    clearTimeout(timeoutId);
+
+                    const contentType = response.headers.get("content-type");
+                    if (contentType && contentType.indexOf("application/json") !== -1) {
+                        data = await response.json();
+                    } else {
+                        const text = await response.text();
+                        throw new Error(`Server returned non-JSON response: ${response.status} ${response.statusText}`);
+                    }
+                } catch (error) {
+                    clearInterval(msgInterval);
+                    console.error("Fetch/Parse Error:", error);
+                    setError(error.name === 'AbortError' ? 'Request timed out. Please try again.' : `Connection failed: ${error.message}`);
+                    setLoading(false);
+                    return;
+                }
+
+                clearInterval(msgInterval);
+
+                if (response.ok) {
+                    setResult(data);
+                } else {
+                    console.error("API Error Details:", data);
+                    const errorMsg = data.details
+                        ? `${data.error}: ${data.details} (Key: ${data.envCheck?.GEMINI_API_KEY || 'Unknown'})`
+                        : (data.error || 'Something went wrong');
+                    setError(errorMsg);
+                }
+                setLoading(false);
+            };
             reader.onerror = () => {
                 clearInterval(msgInterval);
                 setError('Failed to read file');
