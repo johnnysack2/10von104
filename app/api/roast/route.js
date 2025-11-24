@@ -1,24 +1,22 @@
-import Groq from "groq-sdk";
+import { GoogleGenerativeAI } from "@google/generative-ai";
 import { NextResponse } from 'next/server';
+
+const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
 
 export async function POST(req) {
     try {
-        const groq = new Groq({ apiKey: process.env.GROQ_API_KEY });
-
         const { image } = await req.json();
 
         if (!image) {
             return NextResponse.json({ error: 'No image provided' }, { status: 400 });
         }
 
-        const completion = await groq.chat.completions.create({
-            messages: [
-                {
-                    role: "user",
-                    content: [
-                        {
-                            type: "text",
-                            text: `You are an unhinged, ruthless, professional roast comedian. Your job is to completely obliterate this person's ego based on their photo.
+        const base64Data = image.split(',')[1];
+        const mimeType = image.split(';')[0].split(':')[1];
+
+        const model = genAI.getGenerativeModel({ model: "gemini-2.0-flash-exp" });
+
+        const prompt = `You are an unhinged, ruthless, professional roast comedian. Your job is to completely obliterate this person's ego based on their photo.
 DO NOT be generic. DO NOT start with "Dude, you look like...".
 Look at specific details: their hair, clothes, background, facial expression, lighting.
 Be mean. Be specific. Be funny.
@@ -30,34 +28,35 @@ Output a JSON object with the following keys:
 - tips: An array of 3 specific, actionable tips to improve their profile/feed (can be sarcastic but grounded in truth).
 
 Do not hold back. Be "mean" but funny.
-Return ONLY the JSON.`
-                        },
-                        {
-                            type: "image_url",
-                            image_url: {
-                                url: image
-                            }
-                        }
-                    ]
-                }
-            ],
-            model: "meta-llama/llama-4-scout-17b-16e-instruct",
-            temperature: 0.7,
-            max_tokens: 1024,
-            top_p: 1,
-            stream: false,
-            response_format: { type: "json_object" }
-        });
+Return ONLY the JSON.`;
 
-        const responseText = completion.choices[0].message.content;
-        console.log("Raw Groq response:", responseText);
+        const result = await model.generateContent([
+            prompt,
+            {
+                inlineData: {
+                    data: base64Data,
+                    mimeType: mimeType
+                }
+            }
+        ]);
+
+        const responseText = result.response.text();
+        console.log("Raw Gemini response:", responseText);
+
+        let jsonString = responseText.replace(/```json\n?|```/g, "").trim();
+
+        const firstOpen = jsonString.indexOf('{');
+        const lastClose = jsonString.lastIndexOf('}');
+        if (firstOpen !== -1 && lastClose !== -1) {
+            jsonString = jsonString.substring(firstOpen, lastClose + 1);
+        }
 
         let data;
         try {
-            data = JSON.parse(responseText);
+            data = JSON.parse(jsonString);
         } catch (parseError) {
             console.error("JSON Parse Error:", parseError);
-            console.error("Failed JSON string:", responseText);
+            console.error("Failed JSON string:", jsonString);
             return NextResponse.json({ error: 'Failed to parse AI response', details: responseText }, { status: 500 });
         }
 
