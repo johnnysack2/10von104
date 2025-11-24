@@ -79,27 +79,53 @@ export default function Home() {
                 // Create a promise for the minimum delay (6 seconds)
                 const delayPromise = new Promise(resolve => setTimeout(resolve, 6000));
 
-                // Create the fetch promise
-                const fetchPromise = fetch('/api/roast', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify({ image: base64Image }),
-                });
+                const prompt = `You are a brutal, cynical, but hilarious roast master. You are analyzing a user's Tinder profile or Instagram feed.
+Your goal is to destroy their ego but also give them helpful advice.
+
+Output a JSON object with the following keys:
+- rating: A number from 1 to 10 (be harsh).
+- roast: A short, biting paragraph roasting the user based on the image. Make it personal and specific to what you see.
+- tips: An array of 3 specific, actionable tips to improve their profile/feed.
+
+Do not hold back. Be "mean" but funny.
+Return ONLY the JSON.`;
+
+                // Call Puter.js directly (client-side)
+                const aiPromise = window.puter.ai.chat(
+                    prompt,
+                    base64Image,
+                    { model: 'gemini-2.0-flash' }
+                );
 
                 // Wait for BOTH to finish
-                const [_, response] = await Promise.all([delayPromise, fetchPromise]);
-
-                const data = await response.json();
+                const [_, responseText] = await Promise.all([delayPromise, aiPromise]);
 
                 clearInterval(msgInterval); // Stop cycling messages
 
-                if (response.ok) {
-                    setResult(data);
-                } else {
-                    setError(data.error || 'Something went wrong');
+                console.log("Raw Puter response:", responseText);
+
+                // Clean up markdown code blocks if present
+                let jsonString = responseText.replace(/```json\n?|```/g, "").trim();
+
+                // Attempt to find the first '{' and last '}' to extract JSON
+                const firstOpen = jsonString.indexOf('{');
+                const lastClose = jsonString.lastIndexOf('}');
+                if (firstOpen !== -1 && lastClose !== -1) {
+                    jsonString = jsonString.substring(firstOpen, lastClose + 1);
                 }
+
+                let data;
+                try {
+                    data = JSON.parse(jsonString);
+                } catch (parseError) {
+                    console.error("JSON Parse Error:", parseError);
+                    console.error("Failed JSON string:", jsonString);
+                    setError('Failed to parse AI response');
+                    setLoading(false);
+                    return;
+                }
+
+                setResult(data);
                 setLoading(false);
             };
             reader.onerror = () => {
@@ -109,7 +135,7 @@ export default function Home() {
             };
         } catch (err) {
             clearInterval(msgInterval);
-            setError('Failed to connect to server');
+            setError('Failed to connect to AI: ' + err.message);
             setLoading(false);
         }
     };
