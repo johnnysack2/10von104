@@ -12,7 +12,6 @@ export default function Home() {
     const fileInputRef = useRef(null);
 
     useEffect(() => {
-        // Check if user has paid (simple URL param check for prototype)
         if (typeof window !== 'undefined') {
             const params = new URLSearchParams(window.location.search);
             if (params.get('paid') === 'true' || params.get('admin') === 'true') {
@@ -255,7 +254,8 @@ export default function Home() {
                                 fontSize: '0.6rem',
                                 letterSpacing: '2px',
                                 fontWeight: 'bold',
-                                animation: 'pulse 2s infinite'
+                                animation: 'pulse 2s infinite',
+                                position: 'relative'
                             }}>
                                 ✨ AI First Impression
                             </h3>
@@ -265,98 +265,86 @@ export default function Home() {
                                 fontStyle: 'italic',
                                 lineHeight: '1.3',
                                 color: '#fff',
-                                textShadow: '0 2px 10px rgba(0,0,0,0.5)'
+                                textShadow: '0 2px 10px rgba(0,0,0,0.5)',
+                                position: 'relative'
                             }}>
                                 "{result.teaser_roast}"
                             </p>
                         </div>
 
                         {/* LOCKED CONTENT */}
-                        <div style={{ position: 'relative' }}>
+                        <div style={{ position: 'relative', minHeight: '400px' }}>
 
                             {/* Paywall Overlay */}
                             {!isPaid && (
                                 <div style={{
                                     position: 'absolute',
-                                    top: '-5px',
-                                    left: '-10px',
-                                    right: '-10px',
-                                    bottom: '-10px',
-                                    background: 'linear-gradient(to bottom, rgba(0,0,0,0) 0%, rgba(0,0,0,0.95) 10%, #000 100%)',
-                                    backdropFilter: 'blur(10px)',
+                                    top: 0,
+                                    left: 0,
+                                    right: 0,
+                                    bottom: 0,
+                                    background: 'rgba(0,0,0,0.75)',
+                                    backdropFilter: 'blur(3px)',
                                     zIndex: 10,
                                     display: 'flex',
                                     flexDirection: 'column',
                                     alignItems: 'center',
-                                    justifyContent: 'flex-start',
-                                    paddingTop: '2rem',
+                                    justifyContent: 'center',
                                     borderRadius: '20px',
-                                    textAlign: 'center'
+                                    textAlign: 'center',
+                                    padding: '2rem 1rem'
                                 }}>
-                                    <h2 style={{ fontSize: '2rem', marginBottom: '0.2rem', textShadow: '0 0 30px rgba(255,0,0,0.8)', color: '#fff', fontWeight: 'bold' }}>
+                                    <h2 style={{ fontSize: '2.5rem', marginBottom: '0.5rem', textShadow: '0 0 30px rgba(255,0,0,0.9)', color: '#fff', fontWeight: 'bold' }}>
                                         🔒 LOCKED
                                     </h2>
-                                    <p style={{ fontSize: '0.75rem', color: '#aaa', marginBottom: '1rem' }}>
-                                        Brutal analysis generated.
-                                    </p>
 
-                                    <div style={{ textAlign: 'left', marginBottom: '1rem', background: 'rgba(255,255,255,0.02)', padding: '0.8rem', borderRadius: '10px', border: '1px solid rgba(255,255,255,0.05)', width: '90%', maxWidth: '300px' }}>
-                                        <p style={{ margin: '0.3rem 0', display: 'flex', alignItems: 'center', gap: '8px', fontSize: '0.8rem', color: '#ddd' }}>
-                                            <span style={{ color: '#ff4444', fontWeight: 'bold' }}>✓</span> <span><strong>Unhinged Roast</strong> (Full)</span>
+                                    {/* Social Proof Rating */}
+                                    <div style={{ marginBottom: '1.5rem', display: 'flex', alignItems: 'center', gap: '5px', background: 'rgba(0,0,0,0.6)', padding: '0.3rem 0.8rem', borderRadius: '20px', border: '1px solid #333' }}>
+                                        <span style={{ color: '#fbbf24' }}>★★★★★</span>
+                                        <span style={{ color: '#fff', fontSize: '0.8rem', fontWeight: 'bold' }}>4.9/5</span>
+                                    </div>
+
+                                    <div style={{ textAlign: 'left', marginBottom: '1.5rem', background: 'rgba(0,0,0,0.8)', padding: '1rem', borderRadius: '15px', border: '1px solid rgba(255,68,68,0.2)', width: '90%', maxWidth: '320px', boxShadow: '0 10px 30px rgba(0,0,0,0.5)' }}>
+                                        <p style={{ margin: '0.5rem 0', display: 'flex', alignItems: 'center', gap: '10px', fontSize: '0.9rem', color: '#eee' }}>
+                                            💀 <span style={{ color: '#fff' }}><strong>Unhinged Roast</strong> (Full)</span>
                                         </p>
-                                        <p style={{ margin: '0.3rem 0', display: 'flex', alignItems: 'center', gap: '8px', fontSize: '0.8rem', color: '#ddd' }}>
-                                            <span style={{ color: '#ff4444', fontWeight: 'bold' }}>✓</span> <span><strong>Brutal Rating</strong> (1-10)</span>
+                                        <p style={{ margin: '0.5rem 0', display: 'flex', alignItems: 'center', gap: '10px', fontSize: '0.9rem', color: '#eee' }}>
+                                            🔥 <span style={{ color: '#fff' }}><strong>Brutal Rating</strong> (1-10)</span>
                                         </p>
-                                        <p style={{ margin: '0.3rem 0', display: 'flex', alignItems: 'center', gap: '8px', fontSize: '0.8rem', color: '#ddd' }}>
-                                            <span style={{ color: '#ff4444', fontWeight: 'bold' }}>✓</span> <span><strong>3 Life-Changing Tips</strong></span>
+                                        <p style={{ margin: '0.5rem 0', display: 'flex', alignItems: 'center', gap: '10px', fontSize: '0.9rem', color: '#eee' }}>
+                                            🧬 <span style={{ color: '#fff' }}><strong>Psychological Analysis</strong></span>
                                         </p>
-                                        <p style={{ margin: '0.3rem 0', display: 'flex', alignItems: 'center', gap: '8px', fontSize: '0.8rem', color: '#ddd' }}>
-                                            <span style={{ color: '#ff4444', fontWeight: 'bold' }}>✓</span> <span><strong>Psychological Analysis</strong></span>
+                                        <p style={{ margin: '0.5rem 0', display: 'flex', alignItems: 'center', gap: '10px', fontSize: '0.9rem', color: '#eee' }}>
+                                            💡 <span style={{ color: '#fff' }}><strong>3 Life-Changing Tips</strong></span>
                                         </p>
                                     </div>
 
-                                    <button className="btn" onClick={handleUnlock} style={{ transform: 'scale(1.05)', marginBottom: '0.5rem', boxShadow: '0 0 30px rgba(255, 68, 68, 0.4)', padding: '0.7rem 1.5rem', fontSize: '0.9rem' }}>
+                                    <button className="btn" onClick={handleUnlock} style={{ transform: 'scale(1.1)', marginBottom: '0.8rem', boxShadow: '0 0 30px rgba(255, 68, 68, 0.5)', padding: '1rem 2rem', fontSize: '1rem', fontWeight: 'bold', border: '1px solid #ff4444' }}>
                                         UNLOCK NOW • 2.99€
                                     </button>
 
-                                    <p style={{ fontSize: '0.6rem', color: '#555', marginTop: '0.3rem' }}>
+                                    <p style={{ fontSize: '0.7rem', color: '#888', marginTop: '0.5rem' }}>
                                         🔒 Secure Payment via Stripe
                                     </p>
                                 </div>
                             )}
 
-                            {/* Blurred Content with fake background text */}
+                            {/* Blurred Content */}
                             <div style={{
-                                filter: !isPaid ? 'blur(20px)' : 'none',
-                                opacity: !isPaid ? 0.3 : 1,
+                                filter: !isPaid ? 'blur(12px)' : 'none',
+                                opacity: !isPaid ? 0.6 : 1,
                                 transition: 'all 0.5s ease',
-                                position: 'relative'
+                                position: 'relative',
+                                userSelect: 'none',
+                                pointerEvents: 'none'
                             }}>
-                                {!isPaid && (
-                                    <div style={{
-                                        position: 'absolute',
-                                        top: 0,
-                                        left: 0,
-                                        right: 0,
-                                        bottom: 0,
-                                        zIndex: -1,
-                                        overflow: 'hidden',
-                                        color: '#fff',
-                                        fontSize: '1rem',
-                                        lineHeight: '1.6',
-                                        padding: '1rem'
-                                    }}>
-                                        <p>Your appearance screams desperation for validation. Every pixel of your carefully curated image reeks of insecurity masked as confidence. The way you present yourself online is a masterclass in self-delusion. Your fashion choices suggest someone stuck between who they were five years ago and who they'll never become. That forced smile can't hide the emptiness behind your eyes. Your entire aesthetic is a desperate cry for attention wrapped in a thin veneer of "not caring what people think." The gaps between your self-perception and reality could fill an ocean.</p>
-                                    </div>
-                                )}
-
                                 <div className="rating-circle">
                                     {result.rating}/10
                                 </div>
 
                                 <div style={{ marginBottom: '2rem' }}>
                                     <h2>The Roast</h2>
-                                    <p style={{ fontSize: '1.1rem', color: '#fff' }}>
+                                    <p style={{ fontSize: '1.1rem', color: '#fff', lineHeight: '1.6' }}>
                                         {result.roast}
                                     </p>
                                 </div>
