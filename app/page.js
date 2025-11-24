@@ -66,40 +66,6 @@ export default function Home() {
         const msgInterval = setInterval(() => {
             msgIndex = (msgIndex + 1) % loadingMessages.length;
             setLoadingMsg(loadingMessages[msgIndex]);
-        }, 1000);
-
-        try {
-            const reader = new FileReader();
-            reader.readAsDataURL(file);
-            reader.onload = async () => {
-                const base64Image = reader.result;
-
-                const delayPromise = new Promise(resolve => setTimeout(resolve, 6000));
-
-                const fetchPromise = fetch('/api/roast', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify({ image: base64Image }),
-                });
-
-                const [_, response] = await Promise.all([delayPromise, fetchPromise]);
-                const data = await response.json();
-
-                clearInterval(msgInterval);
-
-                if (response.ok) {
-                    setResult(data);
-                } else {
-                    console.error("API Error Details:", data);
-                    const errorMsg = data.details
-                        ? `${data.error}: ${data.details} (Key: ${data.envCheck?.GEMINI_API_KEY || 'Unknown'})`
-                        : (data.error || 'Something went wrong');
-                    setError(errorMsg);
-                }
-                setLoading(false);
-            };
             reader.onerror = () => {
                 clearInterval(msgInterval);
                 setError('Failed to read file');
