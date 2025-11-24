@@ -1,7 +1,9 @@
-import { GoogleGenerativeAI } from "@google/generative-ai";
+import OpenAI from 'openai';
 import { NextResponse } from 'next/server';
 
-const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
+const openai = new OpenAI({
+    apiKey: process.env.OPENAI_API_KEY
+});
 
 export async function POST(req) {
     try {
@@ -11,12 +13,15 @@ export async function POST(req) {
             return NextResponse.json({ error: 'No image provided' }, { status: 400 });
         }
 
-        const base64Data = image.split(',')[1];
-        const mimeType = image.split(';')[0].split(':')[1];
-
-        const model = genAI.getGenerativeModel({ model: "gemini-2.0-flash-exp" });
-
-        const prompt = `You are a brutal, cynical, but hilarious roast master. You are analyzing a user's Tinder profile or Instagram feed.
+        const response = await openai.chat.completions.create({
+            model: "gpt-4o",
+            messages: [
+                {
+                    role: "user",
+                    content: [
+                        {
+                            type: "text",
+                            text: `You are a brutal, cynical, but hilarious roast master. You are analyzing a user's Tinder profile or Instagram feed.
 Your goal is to destroy their ego but also give them helpful advice.
 
 Output a JSON object with the following keys:
@@ -25,20 +30,22 @@ Output a JSON object with the following keys:
 - tips: An array of 3 specific, actionable tips to improve their profile/feed.
 
 Do not hold back. Be "mean" but funny.
-Return ONLY the JSON.`;
-
-        const result = await model.generateContent([
-            prompt,
-            {
-                inlineData: {
-                    data: base64Data,
-                    mimeType: mimeType
+Return ONLY the JSON.`
+                        },
+                        {
+                            type: "image_url",
+                            image_url: {
+                                url: image
+                            }
+                        }
+                    ]
                 }
-            }
-        ]);
+            ],
+            max_tokens: 500
+        });
 
-        const responseText = result.response.text();
-        console.log("Raw Gemini response:", responseText);
+        const responseText = response.choices[0].message.content;
+        console.log("Raw OpenAI response:", responseText);
 
         let jsonString = responseText.replace(/```json\n?|```/g, "").trim();
 
